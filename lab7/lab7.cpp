@@ -17,9 +17,10 @@ int main()
 
 	// Create the ball
 	PhysicsCircle ball;
-	ball.setCenter(Vector2f(400, 300));
+	ball.setCenter(Vector2f(450, 150));
 	ball.setRadius(20);
 	world.AddPhysicsBody(ball);
+	ball.applyImpulse(Vector2f(.5, .3));
 
 	// Create the floor
 	PhysicsRectangle floor;
@@ -47,8 +48,8 @@ int main()
 	world.AddPhysicsBody(top);
 
 	PhysicsRectangle target;
-	target.setSize(Vector2f(80, 80));
-	target.setCenter(Vector2f(400, 350));
+	target.setSize(Vector2f(100, 100));
+	target.setCenter(Vector2f(400, 300));
 	target.setStatic(true);
 	world.AddPhysicsBody(target);
 	bool hit = false;
