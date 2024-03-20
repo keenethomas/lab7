@@ -14,22 +14,81 @@ int main()
 	// Create our window and world with gravity 0,1
 	RenderWindow window(VideoMode(800, 600), "Bounce");
 	World world(Vector2f(0, 1));
+
 	// Create the ball
 	PhysicsCircle ball;
 	ball.setCenter(Vector2f(400, 300));
 	ball.setRadius(20);
 	world.AddPhysicsBody(ball);
+
 	// Create the floor
 	PhysicsRectangle floor;
 	floor.setSize(Vector2f(800, 20));
 	floor.setCenter(Vector2f(400, 590));
 	floor.setStatic(true);
 	world.AddPhysicsBody(floor);
+
+	PhysicsRectangle leftWall;
+	leftWall.setSize(Vector2f(20, 1200));
+	leftWall.setCenter(Vector2f(790, 590));
+	leftWall.setStatic(true);
+	world.AddPhysicsBody(leftWall);
+
+	PhysicsRectangle rightWall;
+	rightWall.setSize(Vector2f(20, 1200));
+	rightWall.setCenter(Vector2f(10, 590));
+	rightWall.setStatic(true);
+	world.AddPhysicsBody(rightWall);
+
+	PhysicsRectangle top;
+	top.setSize(Vector2f(900, 20));
+	top.setCenter(Vector2f(400, 10));
+	top.setStatic(true);
+	world.AddPhysicsBody(top);
+
+	PhysicsRectangle target;
+	target.setSize(Vector2f(80, 80));
+	target.setCenter(Vector2f(400, 350));
+	target.setStatic(true);
+	world.AddPhysicsBody(target);
+	bool hit = false;
+	target.onCollision = [&hit](PhysicsBodyCollisionResult result) {
+			hit = true;
+		};
+
 	int thudCount(0);
 	floor.onCollision = [&thudCount](PhysicsBodyCollisionResult result) {
+			cout << "thud " << thudCount << endl;
+			thudCount++;
+		};
+
+	leftWall.onCollision = [&thudCount](PhysicsBodyCollisionResult result) {
 		cout << "thud " << thudCount << endl;
 		thudCount++;
 		};
+
+	rightWall.onCollision = [&thudCount](PhysicsBodyCollisionResult result) {
+		cout << "thud " << thudCount << endl;
+		thudCount++;
+		};
+
+	top.onCollision = [&thudCount](PhysicsBodyCollisionResult result) {
+		cout << "thud " << thudCount << endl;
+		thudCount++;
+		};
+
+	int bangCount(0);
+	target.onCollision = [&bangCount](PhysicsBodyCollisionResult result) {
+		cout << "bang " << bangCount << endl;
+		bangCount++;
+
+		int hitCount = 3;
+		if (bangCount >= hitCount) {
+				cout << "Game Over!" << endl;
+				exit(0);
+			}
+		};
+
 	Clock clock;
 	Time lastTime(clock.getElapsedTime());
 	while (true) {
@@ -44,6 +103,10 @@ int main()
 		window.clear(Color(0, 0, 0));
 		window.draw(ball);
 		window.draw(floor);
+		window.draw(leftWall);
+		window.draw(rightWall);
+		window.draw(top);
+		window.draw(target);
 		window.display();
 	}
 }
